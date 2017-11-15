@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cash Register</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.4/angular.min.js"></script>
+    <!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="click.js"></script>
+
+</head>
+<body ng-app="register"  ng-controller="registerCtrl">
+<div class="container-fluid">
+    <h1>Cash Register (with buttons)</h1>
+    <div id="buttons">
+       <div ng-repeat="button in buttons">
+         <div style="position:absolute;color:{{button.color}};left:{{button.left}}%;top:{{button.top}}%">
+           <a <button type="button" class="btn btn-primary" id="{{button.id}}" ng-click="buttonClick($event,'button.id');" >{{button.label}}</button></div></a>
+       </div>
+       <div style="position:fixed;height:50px;bottom:0px;left:0px;right:0px;margin-bottom:0px"} ng-show="errorMessage != ''">
+          <div class="col-sm-12">
+           <h3 class="text-danger">{{errorMessage}}</h3>
+         </div>
+       </div>
+     </div>
+     <div class="Item List">
+       <h2 style="position: absolute; right: 305px; top: 5px">Transaction Items</h2>
+       <div id="items">
+         <h3> {{errorMessage}} </h3>
+       <div ng-repeat="item in items">
+         <div style ="text-align: center; position: relative; left: 25%;">
+         <button type="button" class="btn btn-success" style="min-width: 20%; min-height: 100px; font-size: 18px;" ng-click="itemClick(item.itemID);">{{item.item}} &nbsp; {{item.quantity}} &nbsp; &nbsp; &nbsp; {{(item.price * item.quantity | number:2)}} </button>
+          </div>
+ </div>
+ <div id="totalBar" style="max-width: 20%; position:absolute; right:272px">
+<p style="font-size: 25px"> Total: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ${{total(items)}}</p>
+</div>
+<div>
+  <a <button type="button" class="btn btn-primary" id="void-button" ng-click="voidClick($event);" > Void Transaction </button></a>
+  <a <button type="button" class="btn btn-warning" id="sale-button" ng-click="saleClick($event);" >  Complete Sale </button></a>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
