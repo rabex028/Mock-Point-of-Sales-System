@@ -28,6 +28,16 @@
          </div>
        </div>
      </div>
+     <div style="position: absolute; top: 65%; left: 8%" class="login-information">
+       <p id="login-title" style="font-size:20px"> Enter you login credentials here </p>
+       <form nonvalidate class="simple-form">
+         <label>User Name: <input type="text" ng-model="user.name" /><br />
+         <label>Password: <input type="text" ng-model="user.password" /><br />
+       <!-- <span id="username-field"> username </span>
+       <span id="password-field"> password </span> -->
+       <button id="submit-login"> submit </button>
+     </form>
+     </div>
      <div class="Item List">
        <h2 style="position: absolute; right: 305px; top: 5px">Transaction Items</h2>
        <div id="items">
@@ -39,10 +49,8 @@
  </div>
  <div id="totalBar" style="max-width: 20%; position:absolute; right:272px">
 <p style="font-size: 25px"> Total: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ${{total(items)}}</p>
-</div>
-<div>
-  <a <button type="button" class="btn btn-primary" id="void-button" ng-click="voidClick($event);" > Void Transaction </button></a>
-  <a <button type="button" class="btn btn-warning" id="sale-button" ng-click="saleClick($event);" >  Complete Sale </button></a>
+<a <button type="button" class="btn btn-primary" id="void-button" ng-click="voidClick($event);" > Void Transaction </button></a>
+<a <button type="button" class="btn btn-warning" id="sale-button" ng-click="saleClick($event);" >  Complete Sale </button></a>
 </div>
 </div>
 </div>
