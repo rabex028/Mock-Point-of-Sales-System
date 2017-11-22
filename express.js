@@ -64,7 +64,7 @@ app.get("/click",function(req,res){
   var label = extractProperty(buttonInfo, "label", id);
   var price = extractProperty(buttonInfo, "price", id);
 
-  var sql = "INSERT INTO " + user + ".transaction VALUES (" + 01 + ", " + id + ", '" + label + "', " + 1 + ", " + price + ") ON DUPLICATE KEY UPDATE quantity = quantity + 1";
+  var sql = "INSERT INTO " + user + ".transaction VALUES (" + 01 + ", " + "NOW(), " + id + ", '" + label + "', " + 1 + ", " + price + ") ON DUPLICATE KEY UPDATE quantity = quantity + 1";
 
   connection.query(sql,(function(res){return function(err,rows,fields){
     if(err){console.log("We have an insertion error:");
