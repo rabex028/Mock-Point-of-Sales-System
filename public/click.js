@@ -23,6 +23,11 @@ function registerCtrl($scope,registerApi){
   $scope.findSum=findSum;
   $scope.itemClick=itemClick;
   $scope.voidClick=clickVoid;
+  $scope.username="";
+  $scope.password="";
+  $scope.loggedIn=false;
+  $scope.verifyCredentials=verifyCredentials;
+  $scope.logout=logout;
   var loading = false;
   function isLoading(){
     return loading;
@@ -99,6 +104,30 @@ function findSum(price, quantity) {
   return (price * quantity).toFixed(2);
 }
 
+function verifyCredentials($event){
+  $scope.errorMessage='';
+  var response = "";
+  var username = $scope.username;
+  var password = $scope.password;
+  registerApi.checkCredentials(username, password)
+  .success(function(data){
+    if (data.length > 0) {
+      response = true;
+    } else {
+      response = false;
+      $scope.errorMessage="The username and/or password you entered was incorrect."
+    }
+    $scope.loggedIn = response;
+  })
+  .error(function(){$scope.errorMessage="Couldn't verify the credentials"});
+}
+
+function logout(){
+  $scope.loggedIn = false;
+  $scope.username = "";
+  $scope.password = "";
+}
+
 }
 
 // function that accesses the server API endpoints in the server based on which function is called in this controller
@@ -122,6 +151,10 @@ function registerApi($http,apiUrl){
     },
     clickItem: function(id){
       var url = apiUrl +'/itemclick?id='+id
+      return $http.get(url);
+    },
+    checkCredentials: function(username, password){
+      var url = apiUrl +'/login?username=' + username + '&password=' + password
       return $http.get(url);
     }
   };

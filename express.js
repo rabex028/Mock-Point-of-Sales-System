@@ -76,6 +76,19 @@ app.get("/click",function(req,res){
 res.send();
 });
 
+app.get("/login", function(req, res){
+  var username = req.param("username");
+  var password = req.param("password");
+  var sql = "SELECT 1 FROM " + user + ".users WHERE users.user = '" + username + "' && users.password = '" + password + "'";
+
+  connection.query(sql,(function(res){return function(err,rows,fields){
+    if(err){console.log("There was an error validating the credentials: " + err)
+    res.send(err);
+    }
+    res.send(rows);
+  }})(res));
+});
+
 app.get("/void", function(req, res){
 
   var sql = "TRUNCATE TABLE " + user + ".transaction"

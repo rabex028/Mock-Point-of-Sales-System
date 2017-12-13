@@ -17,7 +17,8 @@
 <body ng-app="register"  ng-controller="registerCtrl">
 <div class="container-fluid">
     <h1>Cash Register (with buttons)</h1>
-    <div id="buttons">
+    <h2 ng-style="loggedIn == false ? {'display' : 'none'} : {'display' : 'block'}"> Welcome {{username}}! </h2>
+    <div id="buttons" ng-style="loggedIn == false ? {'display' : 'none'} : {'display' : 'block'}">
        <div ng-repeat="button in buttons">
          <div style="position:absolute;color:{{button.color}};left:{{button.left}}%;top:{{button.top}}%">
            <a <button type="button" class="btn btn-primary" id="{{button.id}}" ng-click="buttonClick($event,'button.id');" >{{button.label}}</button></div></a>
@@ -28,18 +29,16 @@
          </div>
        </div>
      </div>
-     <div style="position: absolute; top: 65%; left: 8%" class="login-information">
+     <div ng-style="loggedIn == true ? {'display' : 'none'} : {'display' : 'block'}" style="position: absolute; top: 65%; left: 8%;" class="login-information">
        <p id="login-title" style="font-size:20px"> Enter you login credentials here </p>
-       <form nonvalidate class="simple-form" ng-submit="checkCredentials()">
+       <form nonvalidate class="simple-form" ng-submit="verifyCredentials($event)">
          User Name: <input type="text" ng-model="username"/><br />
          Password: <input type="text" ng-model="password" /><br />
-         <input type="submit" id="submit" value="submit" /><br />
-         {{username}} <br />{{password}}
-       <!-- <span id="username-field"> username </span>
-       <span id="password-field"> password </span> -->
+         <input type="submit" id="submit" value="submit" ng-click="verifyCredentials($event)" /><br />
+         <h5> {{errorMessage}} </h5>
      </form>
      </div>
-     <div class="Item List">
+     <div class="Item List" ng-style="loggedIn == false ? {'display' : 'none'} : {'display' : 'block'}">
        <h2 style="position: absolute; right: 305px; top: 5px">Transaction Items</h2>
        <div id="items">
          <h3> {{errorMessage}} </h3>
@@ -47,6 +46,7 @@
          <div style ="text-align: center; position: relative; left: 25%;">
          <button type="button" class="btn btn-success" style="min-width: 20%; min-height: 100px; font-size: 18px;" ng-click="itemClick(item.itemID);">{{item.item}} &nbsp; {{item.quantity}} &nbsp; &nbsp; &nbsp; {{(item.price * item.quantity | number:2)}} </button>
           </div>
+          <button ng-style="loggedIn == false ? {'display' : 'none'} : {'width' : '10%'}" style="position: absolute; top: 80%; left: 15%;" class="logout-button" ng-click="logout()"> Logout </button>
  </div>
  <div id="totalBar" style="max-width: 20%; position:absolute; right:272px">
 <p style="font-size: 25px"> Total: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ${{total(items)}}</p>
