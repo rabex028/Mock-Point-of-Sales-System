@@ -64,7 +64,7 @@ app.get("/click",function(req,res){
   var label = extractProperty(buttonInfo, "label", id);
   var price = extractProperty(buttonInfo, "price", id);
 
-  var sql = "INSERT INTO " + user + ".transaction VALUES (" + 01 + ", " + "NOW(), " + id + ", '" + label + "', " + 1 + ", " + price + ") ON DUPLICATE KEY UPDATE quantity = quantity + 1";
+var sql = "INSERT INTO " + user + ".transaction VALUES (" + 01 + ", " + "NOW(), " + id + ", '" + label + "', " + price + ", " + 1 + ") ON DUPLICATE KEY UPDATE quantity = quantity + 1";
 
   connection.query(sql,(function(res){return function(err,rows,fields){
     if(err){console.log("We have an insertion error:");
@@ -79,7 +79,7 @@ res.send();
 app.get("/login", function(req, res){
   var username = req.param("username");
   var password = req.param("password");
-  var sql = "SELECT 1 FROM " + user + ".users WHERE users.user = '" + username + "' && users.password = '" + password + "'";
+  var sql = "SELECT employee_name FROM " + user + ".users WHERE users.username = '" + username + "' && users.password = '" + password + "'";
 
   connection.query(sql,(function(res){return function(err,rows,fields){
     if(err){console.log("There was an error validating the credentials: " + err)
@@ -95,6 +95,18 @@ app.get("/void", function(req, res){
 
   connection.query(sql,(function(res){return function(err,rows,fields){
     if(err){console.log("We have an truncation error: " + err);
+    res.send(err);
+  }
+  res.send();
+}})(res));
+});
+
+app.get("/sale", function(req, res){
+
+  var sql = "CALL " + user + ".archive_transaction()"
+
+  connection.query(sql,(function(res){return function(err,rows,fields){
+    if(err){console.log("There was an archival proceedure error: " + err);
     res.send(err);
   }
   res.send();

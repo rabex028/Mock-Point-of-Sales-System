@@ -23,11 +23,13 @@ function registerCtrl($scope,registerApi){
   $scope.findSum=findSum;
   $scope.itemClick=itemClick;
   $scope.voidClick=clickVoid;
+  $scope.saleClick=saleClick;
   $scope.username="";
   $scope.password="";
   $scope.loggedIn=false;
   $scope.verifyCredentials=verifyCredentials;
   $scope.logout=logout;
+  $scope.displayName = "";
   var loading = false;
   function isLoading(){
     return loading;
@@ -67,7 +69,8 @@ function registerCtrl($scope,registerApi){
 // from the server. Otherwise a error will be shown and loading will be set to false.
 function buttonClick($event){
   $scope.errorMessage='';
-  registerApi.clickButton($event.target.id)
+  var displayName = $scope.displayName;
+  registerApi.clickButton($event.target.id, displayName)
   .success(function(data){
     retrieveItems();
     refreshButtons();
@@ -113,6 +116,7 @@ function verifyCredentials($event){
   .success(function(data){
     if (data.length > 0) {
       response = true;
+      $scope.displayName = data[0].employee_name;
     } else {
       response = false;
       $scope.errorMessage="The username and/or password you entered was incorrect."
@@ -126,6 +130,15 @@ function logout(){
   $scope.loggedIn = false;
   $scope.username = "";
   $scope.password = "";
+}
+
+function saleClick(){
+  $scope.errorMessage='';
+  registerApi.completeSale()
+  .success(function(){
+    console.log("great");
+  })
+  .error(function() {$scope.errorMessage="Could not enter the sale into the system!"});
 }
 
 }
@@ -145,8 +158,8 @@ function registerApi($http,apiUrl){
       var url = apiUrl + '/items';
       return $http.get(url)
     },
-    clickButton: function(id){
-      var url = apiUrl+'/click?id='+id;
+    clickButton: function(id, displayName){
+      var url = apiUrl + '/click?id=' + id + '&employee_name=' + displayName;
       return $http.get(url); // Easy enough to do this way
     },
     clickItem: function(id){
@@ -155,6 +168,10 @@ function registerApi($http,apiUrl){
     },
     checkCredentials: function(username, password){
       var url = apiUrl +'/login?username=' + username + '&password=' + password
+      return $http.get(url);
+    },
+    completeSale: function(){
+      var url = apiUrl + '/sale'
       return $http.get(url);
     }
   };

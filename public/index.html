@@ -16,8 +16,8 @@
 </head>
 <body ng-app="register"  ng-controller="registerCtrl">
 <div class="container-fluid">
-    <h1>Cash Register (with buttons)</h1>
-    <h2 ng-style="loggedIn == false ? {'display' : 'none'} : {'display' : 'block'}"> Welcome {{username}}! </h2>
+    <h1>Cash Register (with buttons that do things)</h1>
+    <h2 ng-style="loggedIn == false ? {'display' : 'none'} : {'display' : 'block'}"> Welcome {{displayName}}! </h2>
     <div id="buttons" ng-style="loggedIn == false ? {'display' : 'none'} : {'display' : 'block'}">
        <div ng-repeat="button in buttons">
          <div style="position:absolute;color:{{button.color}};left:{{button.left}}%;top:{{button.top}}%">
@@ -31,7 +31,7 @@
      </div>
      <div ng-style="loggedIn == true ? {'display' : 'none'} : {'display' : 'block'}" style="position: absolute; top: 65%; left: 8%;" class="login-information">
        <p id="login-title" style="font-size:20px"> Enter you login credentials here </p>
-       <form nonvalidate class="simple-form" ng-submit="verifyCredentials($event)">
+       <form nonvalidate class="simple-form">
          User Name: <input type="text" ng-model="username"/><br />
          Password: <input type="text" ng-model="password" /><br />
          <input type="submit" id="submit" value="submit" ng-click="verifyCredentials($event)" /><br />
@@ -46,8 +46,8 @@
          <div style ="text-align: center; position: relative; left: 25%;">
          <button type="button" class="btn btn-success" style="min-width: 20%; min-height: 100px; font-size: 18px;" ng-click="itemClick(item.itemID);">{{item.item}} &nbsp; {{item.quantity}} &nbsp; &nbsp; &nbsp; {{(item.price * item.quantity | number:2)}} </button>
           </div>
-          <button ng-style="loggedIn == false ? {'display' : 'none'} : {'width' : '10%'}" style="position: absolute; top: 80%; left: 15%;" class="logout-button" ng-click="logout()"> Logout </button>
  </div>
+ <button ng-style="loggedIn == false ? {'display' : 'none'} : {'width' : '10%'}" style="position: absolute; top: 80%; left: 15%;" class="logout-button" ng-click="logout()"> Logout </button>
  <div id="totalBar" style="max-width: 20%; position:absolute; right:272px">
 <p style="font-size: 25px"> Total: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ${{total(items)}}</p>
 <a <button type="button" class="btn btn-primary" id="void-button" ng-click="voidClick($event);" > Void Transaction </button></a>
