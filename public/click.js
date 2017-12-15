@@ -96,6 +96,8 @@ function itemClick(id){
   .error(function(){$scope.errorMessage="Error clicking on item -- Can't Delete!"});
 }
 
+// Tells the server to clear the records from the transaction table. Refreshes the
+// buttons and items arrays upon a successful response.
 function clickVoid($event){
   $scope.errorMessage='';
   registerApi.clickVoid($event)
@@ -111,6 +113,8 @@ function findSum(price, quantity) {
   return (price * quantity).toFixed(2);
 }
 
+// Sends a request to the server to verify the credentials of a user. If the response contains an employee name,
+// the loggedIn variable will be set to true which will display the rest of the elements in the system.
 function verifyCredentials($event){
   $scope.errorMessage='';
   var response = "";
@@ -130,12 +134,15 @@ function verifyCredentials($event){
   .error(function(){$scope.errorMessage="Couldn't verify the credentials"});
 }
 
+// Logs a user out of the system by resetting the loggedIn variable and wiping the username and password
 function logout(){
   $scope.loggedIn = false;
   $scope.username = "";
   $scope.password = "";
 }
 
+// Tells the server (if there are items in the item array) that a transaction has been completed. When it receives a success response from
+// the server, it will set sale to true which will hide non-recipt elements on the screen so they can't modify the receipt.
 function saleClick(){
   $scope.errorMessage='';
   var items = $scope.items;
@@ -152,12 +159,14 @@ else {
 }
 }
 
+// Handles the logic to show elements again once the button "print receipt" is pressed and wipes the items array for the next transaction
 function printReceipt(){
   $scope.sale=false;
   $scope.items.length=0;
 }
+
+// Sourced from StackOverflow, used to generate the date for the receipt
 function getDate(){
-  // Sourced from stackOverflow
   var today = new Date();
   var dd = today.getDate();
   var mm = today.getMonth() + 1;
@@ -186,7 +195,7 @@ function registerApi($http,apiUrl){
     },
     clickButton: function(id, username){
       var url = apiUrl + '/click?id=' + id + '&username=' + username;
-      return $http.get(url); // Easy enough to do this way
+      return $http.get(url);
     },
     clickItem: function(id){
       var url = apiUrl +'/itemclick?id='+id

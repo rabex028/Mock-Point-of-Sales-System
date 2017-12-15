@@ -34,8 +34,6 @@ app.get("/items", function(req, res){
   connection.query(sql,(function(res){return function(err,rows,fields){
     if(err){console.log("We have an error:");
     console.log(err);}
-    //     transactionItems = rows;
-    //     console.log(transactionItems);
     res.send(rows);
   }})(res));
 });
@@ -65,7 +63,7 @@ app.get("/click",function(req,res){
   var label = extractProperty(buttonInfo, "label", id);
   var price = extractProperty(buttonInfo, "price", id);
 
-var sql = "INSERT INTO " + user + ".transaction VALUES (" + usernameSQL + ", " + "NOW(), " + id + ", '" + label + "', " + price + ", " + 1 + ") ON DUPLICATE KEY UPDATE quantity = quantity + 1";
+  var sql = "INSERT INTO " + user + ".transaction VALUES (" + usernameSQL + ", " + "NOW(), " + id + ", '" + label + "', " + price + ", " + 1 + ") ON DUPLICATE KEY UPDATE quantity = quantity + 1";
 
   connection.query(sql,(function(res){return function(err,rows,fields){
     if(err){console.log("We have an insertion error:");
@@ -77,6 +75,8 @@ var sql = "INSERT INTO " + user + ".transaction VALUES (" + usernameSQL + ", " +
 res.send();
 });
 
+// Server endpoint for handling login requests. Receives a username and password with the request. Will query the database to see if both the username and password match a records
+// in the users table. If a match is found, the employee_name of that record will be returned. Otherwise, an empty array will be returned instead, or an error if the database request was unsuccessful.
 app.get("/login", function(req, res){
   var username = req.param("username");
   var password = req.param("password");
@@ -90,6 +90,8 @@ app.get("/login", function(req, res){
   }})(res));
 });
 
+// Server endpoint for canceling an in progress transaction. Will send a truncation command to the transaction table within the database. Upon success, will send an
+// empty response, otherwise an error will be sent.
 app.get("/void", function(req, res){
 
   var sql = "TRUNCATE TABLE " + user + ".transaction"
@@ -102,6 +104,8 @@ app.get("/void", function(req, res){
 }})(res));
 });
 
+// Server endpoint for indicating that a transaction has been completed. Will tell the database to call the archive_transaction procedure. If it succeeds, an
+// empty response will be sent back to the controller, otherwise an error will be sent.
 app.get("/sale", function(req, res){
 
   var sql = "CALL " + user + ".archive_transaction()"
