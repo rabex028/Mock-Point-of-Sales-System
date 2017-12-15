@@ -92,4 +92,27 @@ the itemID that corresponds to each record, as well as its quantity, price, and 
 record into the `archive` table with the same transactionID as was inserted into the `item_archive`, the earliest time that can be found in the `transaction` table as the start time, an endtime that was created when the procedure was called, the difference between the
 endtime and the starttime as the duration (in seconds), the userID who made the transaction, and the total for the transaction.
 
+* Table Appendix
+
+This is a list of all of the tables which interact with the point of sales system:
+
+`till_buttons` Gets the styling information for the buttons, and also provides the id numbers of the items that link up elsewhere in the database. Gets the prices of the items too from the `prices` table.
+
+`prices` Provides the prices of the items which correspond to the itemIDs as a foreign key.
+
+`inventory` Does not actually interact with the system, but is what the items are based on and still has a foreign key link (no constraints).
+
+`transaction` Stages the items in a transaction before they are archived. If we could start over, we think we would insert a record
+for each time a button is clicked instead of incrementing the quantity on a duplicated key insertion, but our front end was too dependent to redesign at that point.
+
+`archive` Archives the total of a transaction, the start time, end time, duration, userID, and gives the record an ID. Inserts one record per each completed transaction. Very closely models the `transactionSummary` View stipulations... but doesn't actually specify the user's name who completed the transaction. We chose instead to go with a more normalized version of an archive, in part because
+of how we are handling quantity. To make up for the ease of creating `transactionSummary`, we think our `archive_transaction` procedure and method of incrementing quantity in the `transaction` table are perhaps more complicated than they would otherwise be.
+
+`item_archive` Keeps track of the indvidual itemID's and their quantities, prices, and subtotals from transactions. Has a foreign
+key of transactionID that is given to each record (item) in a transaction. Keeps track of price for archival purposes, though it could also be deduced from subtotal and quantity.
+
+`users` Stores the employee information for the register. Provides the userID as a foreign key for the transaction and
+archive tables so that employees who made the transactions can be identified. Also handles logging in users to the register system
+by storing usernames and passwords.
+
 
