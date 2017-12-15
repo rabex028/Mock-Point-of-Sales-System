@@ -30,6 +30,10 @@ function registerCtrl($scope,registerApi){
   $scope.verifyCredentials=verifyCredentials;
   $scope.logout=logout;
   $scope.displayName = "";
+  $scope.sale=false;
+  $scope.printReceipt = printReceipt;
+  $scope.getDate = getDate;
+  $scope.date = "";
   var loading = false;
   function isLoading(){
     return loading;
@@ -69,8 +73,8 @@ function registerCtrl($scope,registerApi){
 // from the server. Otherwise a error will be shown and loading will be set to false.
 function buttonClick($event){
   $scope.errorMessage='';
-  var displayName = $scope.displayName;
-  registerApi.clickButton($event.target.id, displayName)
+  var username = $scope.username;
+  registerApi.clickButton($event.target.id, username)
   .success(function(data){
     retrieveItems();
     refreshButtons();
@@ -134,13 +138,35 @@ function logout(){
 
 function saleClick(){
   $scope.errorMessage='';
+  var items = $scope.items;
+  if (items.length > 0) {
   registerApi.completeSale()
   .success(function(){
-    console.log("great");
+    $scope.sale=true;
+    getDate();
   })
   .error(function() {$scope.errorMessage="Could not enter the sale into the system!"});
 }
+else {
+  $scope.errorMessage='A sale must include items in order to be valid';
+}
+}
 
+function printReceipt(){
+  $scope.sale=false;
+  $scope.items.length=0;
+}
+function getDate(){
+  // Sourced from stackOverflow
+  var today = new Date();
+  var dd = today.getDate();
+  var mm = today.getMonth() + 1;
+  var yyyy = today.getFullYear();
+  if(dd<10){dd='0'+dd}
+  if(mm<10){mm='0'+mm}
+  var today = mm+'/'+dd+'/'+yyyy;
+  $scope.date = today;
+}
 }
 
 // function that accesses the server API endpoints in the server based on which function is called in this controller
@@ -158,8 +184,8 @@ function registerApi($http,apiUrl){
       var url = apiUrl + '/items';
       return $http.get(url)
     },
-    clickButton: function(id, displayName){
-      var url = apiUrl + '/click?id=' + id + '&employee_name=' + displayName;
+    clickButton: function(id, username){
+      var url = apiUrl + '/click?id=' + id + '&username=' + username;
       return $http.get(url); // Easy enough to do this way
     },
     clickItem: function(id){

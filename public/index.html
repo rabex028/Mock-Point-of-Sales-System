@@ -16,9 +16,25 @@
 </head>
 <body ng-app="register"  ng-controller="registerCtrl">
 <div class="container-fluid">
-    <h1>Cash Register (with buttons that do things)</h1>
+    <h1>AMC Cash Register</h1>
     <h2 ng-style="loggedIn == false ? {'display' : 'none'} : {'display' : 'block'}"> Welcome {{displayName}}! </h2>
-    <div id="buttons" ng-style="loggedIn == false ? {'display' : 'none'} : {'display' : 'block'}">
+     <div id="receipt" ng-style="sale == false ? {'display' : 'none'} : {'display': 'inline-block'}">
+      <div id="receipt-content" style="width: 15%; border-style: dotted; margin: 0 auto; display: inline-block; position: fixed; top: 20%; left: 43%;">
+        <div id="text" style="margin-left:30px; margin-right: 30px;">
+        <h1 style = "position: fixed; top: 7%; left: 44%;">Receipt Preview</h1>
+        <h3>AMC Theatres</h3>
+        <p>Thank you for choosing AMC theaters</br>we hope you enjoy your movie</p>
+        <h4>Cashier: {{displayName}}</h4>
+        <h4>Transaction Date: {{date}}</h4></br>
+        <h4>QTY&nbsp;&nbsp;&nbsp;ITEM&nbsp;&nbsp;&nbsp;AMT</h4>
+        <div ng-repeat="item in items">
+          <h4>{{item.quantity}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {{item.item}}&nbsp;&nbsp;&nbsp;${{(item.price * item.quantity | number:2)}}</p>
+        </div>
+        <h3>Total: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${{total(items)}}</h3>
+    </div>
+  </div>
+</div>
+    <div id="buttons" ng-style="loggedIn == false || sale == true ? {'display' : 'none'} : {'display' : 'block'}">
        <div ng-repeat="button in buttons">
          <div style="position:absolute;color:{{button.color}};left:{{button.left}}%;top:{{button.top}}%">
            <a <button type="button" class="btn btn-primary" id="{{button.id}}" ng-click="buttonClick($event,'button.id');" >{{button.label}}</button></div></a>
@@ -29,30 +45,28 @@
          </div>
        </div>
      </div>
-     <div ng-style="loggedIn == true ? {'display' : 'none'} : {'display' : 'block'}" style="position: absolute; top: 65%; left: 8%;" class="login-information">
+     <div ng-style="loggedIn == true ? {'display' : 'none'} : {'display' : 'block'}" style="margin-left: 30px; margin-top: 30px" class="login-information">
        <p id="login-title" style="font-size:20px"> Enter you login credentials here </p>
-       <form nonvalidate class="simple-form">
-         User Name: <input type="text" ng-model="username"/><br />
-         Password: <input type="text" ng-model="password" /><br />
+       <form nonvalidate class="simple-form:" style="margin: auto">
+        User Name:  <input type="text" ng-model="username" style="margin: auto;"/><br />
+         Password: &nbsp; <input type="text" ng-model="password" style="margin: auto;" /><br />
          <input type="submit" id="submit" value="submit" ng-click="verifyCredentials($event)" /><br />
          <h5> {{errorMessage}} </h5>
      </form>
      </div>
-     <div class="Item List" ng-style="loggedIn == false ? {'display' : 'none'} : {'display' : 'block'}">
-       <h2 style="position: absolute; right: 305px; top: 5px">Transaction Items</h2>
-       <div id="items">
-         <h3> {{errorMessage}} </h3>
-       <div ng-repeat="item in items">
-         <div style ="text-align: center; position: relative; left: 25%;">
-         <button type="button" class="btn btn-success" style="min-width: 20%; min-height: 100px; font-size: 18px;" ng-click="itemClick(item.itemID);">{{item.item}} &nbsp; {{item.quantity}} &nbsp; &nbsp; &nbsp; {{(item.price * item.quantity | number:2)}} </button>
+     <div class="Item List" ng-style="loggedIn == false || sale == true ? {'display' : 'none'} : {'display' : 'inline-block'}" style="float:right; position: fixed; top: 5%; left: 75%;">
+       <h2>Transaction Items</h2>
+       <div ng-repeat="item in items" style="position: relative;">
+         <button type="button" class="btn btn-success" style="min-width: 100%; min-height: 100px; font-size: 18px;" ng-click="itemClick(item.itemID);">{{item.item}} &nbsp; {{item.quantity}} &nbsp; &nbsp; &nbsp; {{(item.price * item.quantity | number:2)}} </button>
           </div>
+          <div id="totalBar">
+         <p style="font-size: 25px"> Total: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ${{total(items)}}</p>
+         <a <button type="button" class="btn btn-primary" id="void-button" ng-click="voidClick($event);" > Void Transaction </button></a>
+         <a <button type="button" class="btn btn-warning" id="sale-button" ng-click="saleClick($event);" >  Complete Sale </button></a>
  </div>
- <button ng-style="loggedIn == false ? {'display' : 'none'} : {'width' : '10%'}" style="position: absolute; top: 80%; left: 15%;" class="logout-button" ng-click="logout()"> Logout </button>
- <div id="totalBar" style="max-width: 20%; position:absolute; right:272px">
-<p style="font-size: 25px"> Total: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  ${{total(items)}}</p>
-<a <button type="button" class="btn btn-primary" id="void-button" ng-click="voidClick($event);" > Void Transaction </button></a>
-<a <button type="button" class="btn btn-warning" id="sale-button" ng-click="saleClick($event);" >  Complete Sale </button></a>
 </div>
+<button type="button" class="btn btn-danger" ng-style="loggedIn == false || sale == true ? {'display' : 'none'} : {'width' : '10%'}" style="position: absolute; top: 8%; left: 17%;" class="logout-button" ng-click="logout()"> Logout </button>
+<button type="button" class="btn btn-success" id="print" ng-click=printReceipt() ng-style="loggedIn == false || sale == false ? {'display' : 'none'} : {'width' : '10%'}" style="position: absolute; top: 78%; left: 45%;">Print Receipt</button>
 </div>
 </div>
 </div>

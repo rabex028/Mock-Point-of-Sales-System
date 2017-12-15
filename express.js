@@ -59,12 +59,13 @@ app.get("/itemclick", function(req, res){
 // type in the transaction table, the quantity of that item will be incremented. Will send an empty response to the controller, otherwise an error.
 app.get("/click",function(req,res){
   var id = req.param("id");
-
+  var username = req.param("username")
+  var usernameSQL = "(SELECT userID FROM " + user + ".users WHERE username = '" + username + "')";
   // Extracts the item information that is stored along with the buttons in the server button array so that the insert statement is complete
   var label = extractProperty(buttonInfo, "label", id);
   var price = extractProperty(buttonInfo, "price", id);
 
-var sql = "INSERT INTO " + user + ".transaction VALUES (" + 01 + ", " + "NOW(), " + id + ", '" + label + "', " + price + ", " + 1 + ") ON DUPLICATE KEY UPDATE quantity = quantity + 1";
+var sql = "INSERT INTO " + user + ".transaction VALUES (" + usernameSQL + ", " + "NOW(), " + id + ", '" + label + "', " + price + ", " + 1 + ") ON DUPLICATE KEY UPDATE quantity = quantity + 1";
 
   connection.query(sql,(function(res){return function(err,rows,fields){
     if(err){console.log("We have an insertion error:");
