@@ -6,14 +6,14 @@ is required to be restarted, the register url can be found at `http://localhost:
 
 The first screen you will encounter is the login page, where you can enter
 your employee credentials.
-![Screenshot](login.png)
+![Screenshot](screenshots/login.png)
 
 If you accidently enter the wrong username and password combo, a message will
 appear explaining the error. Once you have logged into the system, you will
 see that there are two main sections of the interface, an array of buttons,
 and a (most likely empty) area where items in a transaction will appear.
 The button array will look like this:
-![Screenshot](buttons.png)
+![Screenshot](screenshots/buttons.png)
 
 The buttons with items on them correspond to what a customer would like to purchase. Every
 time you press one of the buttons, the quantity of the item being sold in the transaction
@@ -23,7 +23,7 @@ system, but will save the items in the current transaction.
 
 The other side of the screen will show the list of items. Here is what it looks like
 when there are items in a transaction:
-![Screenshot](items.png)
+![Screenshot](screenshots/items.png)
 
 Each item is actually a button you can press to remove that item (and all of its quantity)
 from the current transaction. This is so that if you accidently press one of the earlier
@@ -35,7 +35,7 @@ of the list so you can start over. Once you have finished a transaction, you sho
 the "Complete Sale" button so that the transaction can be archived.
 
 After you press the "Complete Sale" button, you will be greeted with this screen:
-![Screenshot](receipt.png)
+![Screenshot](screenshots/receipt.png)
 
 The screen will display a preview of the receipt that will be printed for the customer.
 The rest of the buttons on the register are hidden so that the receipt can't be altered after the transaction has already completed.
@@ -47,6 +47,6 @@ kinds of things.
 
 If for some reason the system encounters an error, it should display information
 about it in red text in the bottom left hand corner of the screen.
-![Screenshot](error.png)
+![Screenshot](screenshots/error.png)
 
 If it isn't obvious what is causing an error, we recommend contacting your manager or administrator.
