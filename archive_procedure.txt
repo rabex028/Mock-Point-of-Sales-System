@@ -1,0 +1,30 @@
+DELIMITER //
+
+CREATE PROCEDURE archive_transaction()
+BEGIN 
+  DECLARE startTime DATETIME DEFAULT NULL;
+  DECLARE endTime DATETIME DEFAULT NOW();
+  DECLARE id INT DEFAULT 0;
+  DECLARE rowIndex INT DEFAULT 0;
+	
+  SET rowIndex = (SELECT min(itemID) FROM fossx229.transaction);
+  SET id = (SELECT DISTINCT COUNT(transactionID) FROM fossx229.archive) + 1;
+  SET startTime = (SELECT clickTime from fossx229.transaction ORDER BY clickTime LIMIT 1);
+  
+  read_loop: LOOP
+    IF rowIndex IS NULL THEN
+      LEAVE read_loop;
+    END IF;
+  
+  INSERT INTO fossx229.item_archive VALUES (id, (SELECT itemID FROM fossx229.transaction WHERE fossx229.transaction.itemID = rowIndex),(SELECT quantity FROM fossx229.transaction WHERE fossx229.transaction.itemID = rowIndex),(SELECT price FROM fossx229.transaction WHERE fossx229.transaction.itemID = rowIndex),(SELECT (price * quantity) FROM fossx229.transaction WHERE fossx229.transaction.itemID = rowIndex));
+
+SET rowIndex = (SELECT min(itemID) FROM fossx229.transaction WHERE itemID > rowIndex);
+END LOOP;
+
+  INSERT INTO fossx229.archive VALUES (id,startTime, endTime, (SELECT (endTime - startTime)),(SELECT userID FROM fossx229.transaction LIMIT 1), (SELECT SUM(price * quantity) FROM fossx229.transaction));
+
+  TRUNCATE TABLE fossx229.transaction;
+
+End; //
+
+DELIMITER ;
