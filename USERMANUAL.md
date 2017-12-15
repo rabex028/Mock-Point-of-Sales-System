@@ -105,8 +105,7 @@ This is a list of all of the tables which interact with the point of sales syste
 `transaction` Stages the items in a transaction before they are archived. If we could start over, we think we would insert a record
 for each time a button is clicked instead of incrementing the quantity on a duplicated key insertion, but our front end was too dependent to redesign at that point.
 
-`archive` Archives the total of a transaction, the start time, end time, duration, userID, and gives the record an ID. Inserts one record per each completed transaction. Very closely models the `transactionSummary` View stipulations... but doesn't actually specify the user's name who completed the transaction. We chose instead to go with a more normalized version of an archive, in part because
-of how we are handling quantity. To make up for the ease of creating `transactionSummary`, we think our `archive_transaction` procedure and method of incrementing quantity in the `transaction` table are perhaps more complicated than they would otherwise be.
+`archive` Archives the total of a transaction, the start time, end time, duration, userID, and gives the record itself a transactionID. Inserts one record per each completed transaction. Very closely models the `transactionSummary` View stipulations... but doesn't actually specify the user's name who completed the transaction. We chose instead to go with a more normalized version of an archive, in part because of how we are handling quantity.
 
 `item_archive` Keeps track of the indvidual itemID's and their quantities, prices, and subtotals from transactions. Has a foreign
 key of transactionID that is given to each record (item) in a transaction. Keeps track of price for archival purposes, though it could also be deduced from subtotal and quantity.
