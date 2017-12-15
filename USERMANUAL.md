@@ -69,6 +69,7 @@ If it isn't obvious what is causing an error, we recommend contacting your manag
 * API Commands
 
 The base API url which must be preappended to all commands is `localhost:1337`
+If the command url contains an underscore character, it means a parameter is expected in its place.
 
 `/void` Truncates the `transaction` table in the database. Nothing to display on screen.
 
