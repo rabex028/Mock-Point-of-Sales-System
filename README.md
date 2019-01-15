@@ -1,5 +1,7 @@
 # Cash Register User Manual
 
+For technical details, please view the administrator section.
+
 Before you are able to operate the register, please make sure you have contacted
 a manager about putting your credentials into the system. In case the program
 is required to be restarted, the register url can be found at `http://localhost:1337`.
@@ -59,12 +61,6 @@ If it isn't obvious what is causing an error, we recommend contacting your manag
 
 
 # For Administrators
-
-* Administration Credentials
-
-`username`: testy_pete
-
-`password`: institutional_paisley
 
 * API Commands
 
