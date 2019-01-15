@@ -1,6 +1,6 @@
 # Cash Register User Manual
 
-For technical details, please view the administrator section.
+For technical details of this application please view the administrator section down below.
 
 Before you are able to operate the register, please make sure you have contacted
 a manager about putting your credentials into the system. In case the program
